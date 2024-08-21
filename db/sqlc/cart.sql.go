@@ -13,18 +13,17 @@ import (
 
 const createCart = `-- name: CreateCart :one
 INSERT INTO carts (cart_user_id, cart_cours_id, cart_qty, cart_price, cart_modified, cart_status, cart_cart_id)
-VALUES ($1, $2, $3, $4, $5, $6, $7)
+VALUES ($1, $2, $3, $4, CURRENT_TIMESTAMP, $5, $6)
 RETURNING cart_id, cart_user_id, cart_cours_id, cart_qty, cart_price, cart_modified, cart_status, cart_cart_id
 `
 
 type CreateCartParams struct {
-	CartUserID   *int32           `json:"cart_user_id"`
-	CartCoursID  *int32           `json:"cart_cours_id"`
-	CartQty      *int32           `json:"cart_qty"`
-	CartPrice    pgtype.Numeric   `json:"cart_price"`
-	CartModified pgtype.Timestamp `json:"cart_modified"`
-	CartStatus   *string          `json:"cart_status"`
-	CartCartID   *int32           `json:"cart_cart_id"`
+	CartUserID  *int32         `json:"cart_user_id"`
+	CartCoursID *int32         `json:"cart_cours_id"`
+	CartQty     *int32         `json:"cart_qty"`
+	CartPrice   pgtype.Numeric `json:"cart_price"`
+	CartStatus  *string        `json:"cart_status"`
+	CartCartID  *int32         `json:"cart_cart_id"`
 }
 
 func (q *Queries) CreateCart(ctx context.Context, arg CreateCartParams) (*Cart, error) {
@@ -33,7 +32,6 @@ func (q *Queries) CreateCart(ctx context.Context, arg CreateCartParams) (*Cart, 
 		arg.CartCoursID,
 		arg.CartQty,
 		arg.CartPrice,
-		arg.CartModified,
 		arg.CartStatus,
 		arg.CartCartID,
 	)
@@ -115,20 +113,19 @@ func (q *Queries) GetCartByID(ctx context.Context, cartID int32) (*Cart, error) 
 
 const updateCart = `-- name: UpdateCart :one
 UPDATE carts
-SET cart_user_id = $2, cart_cours_id = $3, cart_qty = $4, cart_price = $5, cart_modified = $6, cart_status = $7, cart_cart_id = $8
+SET cart_user_id = $2, cart_cours_id = $3, cart_qty = $4, cart_price = $5, cart_modified = CURRENT_TIMESTAMP, cart_status = $6, cart_cart_id = $7
 WHERE cart_id = $1
 RETURNING cart_id, cart_user_id, cart_cours_id, cart_qty, cart_price, cart_modified, cart_status, cart_cart_id
 `
 
 type UpdateCartParams struct {
-	CartID       int32            `json:"cart_id"`
-	CartUserID   *int32           `json:"cart_user_id"`
-	CartCoursID  *int32           `json:"cart_cours_id"`
-	CartQty      *int32           `json:"cart_qty"`
-	CartPrice    pgtype.Numeric   `json:"cart_price"`
-	CartModified pgtype.Timestamp `json:"cart_modified"`
-	CartStatus   *string          `json:"cart_status"`
-	CartCartID   *int32           `json:"cart_cart_id"`
+	CartID      int32          `json:"cart_id"`
+	CartUserID  *int32         `json:"cart_user_id"`
+	CartCoursID *int32         `json:"cart_cours_id"`
+	CartQty     *int32         `json:"cart_qty"`
+	CartPrice   pgtype.Numeric `json:"cart_price"`
+	CartStatus  *string        `json:"cart_status"`
+	CartCartID  *int32         `json:"cart_cart_id"`
 }
 
 func (q *Queries) UpdateCart(ctx context.Context, arg UpdateCartParams) (*Cart, error) {
@@ -138,7 +135,6 @@ func (q *Queries) UpdateCart(ctx context.Context, arg UpdateCartParams) (*Cart, 
 		arg.CartCoursID,
 		arg.CartQty,
 		arg.CartPrice,
-		arg.CartModified,
 		arg.CartStatus,
 		arg.CartCartID,
 	)

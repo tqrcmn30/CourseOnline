@@ -2,18 +2,18 @@ package server
 
 import (
 	"context"
+	"courseonline/config"
 	"log"
-	"time"
 
 	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/spf13/viper"
 )
 
-func InitDatabase(config *viper.Viper) *pgxpool.Conn {
-	connectionString := config.GetString("database.connection_string")
-	maxIdleConnections := config.GetInt("database.max_idle_connections")
-	maxOpenConnections := config.GetInt("database.max_open_connections")
-	connectionMaxLifetime := config.GetDuration("database.connection_max_lifetime")
+func InitDatabase(config *config.Config) *pgxpool.Conn {
+	connectionString := viper.GetString("database.connection_string")
+	maxIdleConnections := viper.GetDuration("database.max_idle_connections")
+	maxOpenConnections := viper.GetInt32("database.max_open_connections")
+	connectionMaxLifetime := viper.GetDuration("database.connection_max_lifetime")
 	//driverName := config.GetString("database.driver_name")
 
 	if connectionString == "" {
@@ -25,8 +25,8 @@ func InitDatabase(config *viper.Viper) *pgxpool.Conn {
 		log.Fatal("Failed to create a config, error: ", err)
 	}
 
-	dbConfig.MaxConns = int32(maxOpenConnections)
-	dbConfig.MaxConnIdleTime = time.Duration(maxIdleConnections)
+	dbConfig.MaxConns = maxOpenConnections
+	dbConfig.MaxConnIdleTime = maxIdleConnections
 	dbConfig.MaxConnLifetime = connectionMaxLifetime
 
 	connPool, err := pgxpool.NewWithConfig(context.Background(), dbConfig)
@@ -45,5 +45,14 @@ func InitDatabase(config *viper.Viper) *pgxpool.Conn {
 	}
 
 	defer log.Println("Database already connected")
+
 	return connection
+}
+
+func Close(conn *pgxpool.Conn) {
+	err := conn.Conn().Close(context.Background())
+	log.Println("Database already closed..")
+	if err != nil {
+		log.Fatalf("Unable to close connection %v\n", err)
+	}
 }

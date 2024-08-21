@@ -1,35 +1,31 @@
 package server
 
 import (
-	"courseonline/controller"
+	"courseonline/config"
 	"courseonline/services"
 	"log"
 
 	"github.com/gin-gonic/gin"
-	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/spf13/viper"
 )
 
 type HttpServer struct {
-	Config *viper.Viper
 	Router *gin.Engine
+	Store  services.Store
+	Config *config.Config
 }
 
-func InitHttpServer(config *viper.Viper, dbHandler *pgxpool.Conn) *HttpServer {
-
-	serviceManager := services.NewServiceManager(dbHandler)
-	controllerManager := controller.NewControllerManager(serviceManager)
-
-	router := InitRouter(controllerManager)
-
+func NewHttpServer(config *config.Config, store services.Store, router *gin.Engine) *HttpServer {
 	return &HttpServer{
 		Config: config,
+		Store:  store,
 		Router: router,
 	}
 }
 
 func (hs HttpServer) Start() {
-	err := hs.Router.Run(hs.Config.GetString("http.server_address"))
+	httpAddr := viper.GetString("http.server_address")
+	err := hs.Router.Run(httpAddr)
 	if err != nil {
 		log.Fatalf("Error while starting HTTP server: %v", err)
 	}

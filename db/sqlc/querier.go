@@ -16,19 +16,23 @@ type Querier interface {
 	DeleteCart(ctx context.Context, cartID int32) error
 	DeleteCourse(ctx context.Context, coursID int32) error
 	DeleteOrderCourse(ctx context.Context, uscoID int32) error
-	DeleteUser(ctx context.Context, userID int32) error
+	DeleteToken(ctx context.Context, userToken *string) error
+	FindUserByPhone(ctx context.Context, userPhone *string) (*FindUserByPhoneRow, error)
+	FindUserByUserPassword(ctx context.Context, arg FindUserByUserPasswordParams) (*FindUserByUserPasswordRow, error)
+	FindUserByUsername(ctx context.Context, userName *string) (*FindUserByUsernameRow, error)
 	GetAllCarts(ctx context.Context) ([]*Cart, error)
 	GetAllCourses(ctx context.Context) ([]*Course, error)
 	GetAllOrderCourses(ctx context.Context) ([]*OrderCourse, error)
-	GetAllUsers(ctx context.Context) ([]*User, error)
 	GetCartByID(ctx context.Context, cartID int32) (*Cart, error)
 	GetCourseByID(ctx context.Context, coursID int32) (*Course, error)
 	GetOrderCourseByID(ctx context.Context, uscoID int32) (*OrderCourse, error)
-	GetUserByID(ctx context.Context, userID int32) (*User, error)
 	UpdateCart(ctx context.Context, arg UpdateCartParams) (*Cart, error)
 	UpdateCourse(ctx context.Context, arg UpdateCourseParams) (*Course, error)
 	UpdateOrderCourse(ctx context.Context, arg UpdateOrderCourseParams) (*OrderCourse, error)
-	UpdateUser(ctx context.Context, arg UpdateUserParams) (*User, error)
+	UpdateToken(ctx context.Context, arg UpdateTokenParams) (*User, error)
+	UpdateUserName(ctx context.Context, arg UpdateUserNameParams) (*User, error)
+	UpdateUserPhone(ctx context.Context, arg UpdateUserPhoneParams) (*User, error)
 }
 
 var _ Querier = (*Queries)(nil)
+

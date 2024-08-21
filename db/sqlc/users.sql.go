@@ -10,27 +10,20 @@ import (
 )
 
 const createUser = `-- name: CreateUser :one
-INSERT INTO users (user_name, user_password, user_email, user_phone, user_token)
-VALUES ($1, $2, $3, $4, $5)
-RETURNING user_id, user_name, user_password, user_email, user_phone, user_token
+INSERT INTO users(user_name,user_password,user_phone)
+	VALUES
+	($1, crypt($2,gen_salt('bf')),$3)
+    RETURNING user_id, user_name, user_password, user_email, user_phone, user_token
 `
 
 type CreateUserParams struct {
-	UserName     *string `json:"user_name"`
+	UserName  *string     `json:"user_name"`
 	UserPassword *string `json:"user_password"`
-	UserEmail    *string `json:"user_email"`
-	UserPhone    *string `json:"user_phone"`
-	UserToken    *string `json:"user_token"`
+	UserPhone *string     `json:"user_phone"`
 }
 
 func (q *Queries) CreateUser(ctx context.Context, arg CreateUserParams) (*User, error) {
-	row := q.db.QueryRow(ctx, createUser,
-		arg.UserName,
-		arg.UserPassword,
-		arg.UserEmail,
-		arg.UserPhone,
-		arg.UserToken,
-	)
+	row := q.db.QueryRow(ctx, createUser, arg.UserName, arg.UserPassword, arg.UserPhone)
 	var i User
 	err := row.Scan(
 		&i.UserID,
@@ -43,89 +36,162 @@ func (q *Queries) CreateUser(ctx context.Context, arg CreateUserParams) (*User, 
 	return &i, err
 }
 
-const deleteUser = `-- name: DeleteUser :exec
-DELETE FROM users WHERE user_id = $1
-`
-
-func (q *Queries) DeleteUser(ctx context.Context, userID int32) error {
-	_, err := q.db.Exec(ctx, deleteUser, userID)
-	return err
-}
-
-const getAllUsers = `-- name: GetAllUsers :many
-SELECT user_id, user_name, user_password, user_email, user_phone, user_token FROM users
-`
-
-func (q *Queries) GetAllUsers(ctx context.Context) ([]*User, error) {
-	rows, err := q.db.Query(ctx, getAllUsers)
-	if err != nil {
-		return nil, err
-	}
-	defer rows.Close()
-	var items []*User
-	for rows.Next() {
-		var i User
-		if err := rows.Scan(
-			&i.UserID,
-			&i.UserName,
-			&i.UserPassword,
-			&i.UserEmail,
-			&i.UserPhone,
-			&i.UserToken,
-		); err != nil {
-			return nil, err
-		}
-		items = append(items, &i)
-	}
-	if err := rows.Err(); err != nil {
-		return nil, err
-	}
-	return items, nil
-}
-
-const getUserByID = `-- name: GetUserByID :one
-SELECT user_id, user_name, user_password, user_email, user_phone, user_token FROM users WHERE user_id = $1
-`
-
-func (q *Queries) GetUserByID(ctx context.Context, userID int32) (*User, error) {
-	row := q.db.QueryRow(ctx, getUserByID, userID)
-	var i User
-	err := row.Scan(
-		&i.UserID,
-		&i.UserName,
-		&i.UserPassword,
-		&i.UserEmail,
-		&i.UserPhone,
-		&i.UserToken,
-	)
-	return &i, err
-}
-
-const updateUser = `-- name: UpdateUser :one
-UPDATE users
-SET user_name = $2, user_password = $3, user_email = $4, user_phone = $5, user_token = $6
-WHERE user_id = $1
+const deleteToken = `-- name: DeleteToken :exec
+UPDATE users SET user_token = '' WHERE user_token = $1
 RETURNING user_id, user_name, user_password, user_email, user_phone, user_token
 `
 
-type UpdateUserParams struct {
+func (q *Queries) DeleteToken(ctx context.Context, userToken *string) error {
+	_, err := q.db.Exec(ctx, deleteToken, userToken)
+	return err
+}
+
+const findUserByPhone = `-- name: FindUserByPhone :one
+select user_id,user_name,user_password,user_phone,user_token 
+from users  
+WHERE user_phone  = $1
+`
+
+type FindUserByPhoneRow struct {
 	UserID       int32   `json:"user_id"`
 	UserName     *string `json:"user_name"`
 	UserPassword *string `json:"user_password"`
-	UserEmail    *string `json:"user_email"`
 	UserPhone    *string `json:"user_phone"`
 	UserToken    *string `json:"user_token"`
 }
 
-func (q *Queries) UpdateUser(ctx context.Context, arg UpdateUserParams) (*User, error) {
-	row := q.db.QueryRow(ctx, updateUser,
-		arg.UserID,
-		arg.UserName,
-		arg.UserPassword,
-		arg.UserEmail,
-		arg.UserPhone,
-		arg.UserToken,
+func (q *Queries) FindUserByPhone(ctx context.Context, userPhone *string) (*FindUserByPhoneRow, error) {
+	row := q.db.QueryRow(ctx, findUserByPhone, userPhone)
+	var i FindUserByPhoneRow
+	err := row.Scan(
+		&i.UserID,
+		&i.UserName,
+		&i.UserPassword,
+		&i.UserPhone,
+		&i.UserToken,
 	)
+	return &i, err
+}
+
+const findUserByUserPassword = `-- name: FindUserByUserPassword :one
+select user_id,user_name,user_password,user_phone,user_token 
+from users  
+WHERE user_name = $1 and user_password = crypt($2, user_password)
+`
+
+type FindUserByUserPasswordParams struct {
+	UserName *string     `json:"user_name"`
+	UserPassword *string `json:"user_password"`
+}
+
+type FindUserByUserPasswordRow struct {
+	UserID       int32   `json:"user_id"`
+	UserName     *string `json:"user_name"`
+	UserPassword *string `json:"user_password"`
+	UserPhone    *string `json:"user_phone"`
+	UserToken    *string `json:"user_token"`
+}
+
+func (q *Queries) FindUserByUserPassword(ctx context.Context, arg FindUserByUserPasswordParams) (*FindUserByUserPasswordRow, error) {
+	row := q.db.QueryRow(ctx, findUserByUserPassword, arg.UserName, arg.UserPassword)
+	var i FindUserByUserPasswordRow
+	err := row.Scan(
+		&i.UserID,
+		&i.UserName,
+		&i.UserPassword,
+		&i.UserPhone,
+		&i.UserToken,
+	)
+	return &i, err
+}
+
+const findUserByUsername = `-- name: FindUserByUsername :one
+select user_id,user_name,user_password,user_phone,user_token 
+from users  
+WHERE user_name = $1
+`
+
+type FindUserByUsernameRow struct {
+	UserID       int32   `json:"user_id"`
+	UserName     *string `json:"user_name"`
+	UserPassword *string `json:"user_password"`
+	UserPhone    *string `json:"user_phone"`
+	UserToken    *string `json:"user_token"`
+}
+
+func (q *Queries) FindUserByUsername(ctx context.Context, userName *string) (*FindUserByUsernameRow, error) {
+	row := q.db.QueryRow(ctx, findUserByUsername, userName)
+	var i FindUserByUsernameRow
+	err := row.Scan(
+		&i.UserID,
+		&i.UserName,
+		&i.UserPassword,
+		&i.UserPhone,
+		&i.UserToken,
+	)
+	return &i, err
+}
+
+const updateToken = `-- name: UpdateToken :one
+UPDATE users SET user_token = $1 WHERE user_id = $2
+RETURNING user_id, user_name, user_password, user_email, user_phone, user_token
+`
+
+type UpdateTokenParams struct {
+	UserToken *string `json:"user_token"`
+	UserID    int32   `json:"user_id"`
+}
+
+func (q *Queries) UpdateToken(ctx context.Context, arg UpdateTokenParams) (*User, error) {
+	row := q.db.QueryRow(ctx, updateToken, arg.UserToken, arg.UserID)
+	var i User
+	err := row.Scan(
+		&i.UserID,
+		&i.UserName,
+		&i.UserPassword,
+		&i.UserEmail,
+		&i.UserPhone,
+		&i.UserToken,
+	)
+	return &i, err
+}
+
+const updateUserName = `-- name: UpdateUserName :one
+UPDATE users SET user_name = $1 WHERE user_id = $2
+RETURNING user_id, user_name, user_password, user_email, user_phone, user_token
+`
+
+type UpdateUserNameParams struct {
+	UserName *string `json:"user_name"`
+	UserID   int32   `json:"user_id"`
+}
+
+func (q *Queries) UpdateUserName(ctx context.Context, arg UpdateUserNameParams) (*User, error) {
+	row := q.db.QueryRow(ctx, updateUserName, arg.UserName, arg.UserID)
+	var i User
+	err := row.Scan(
+		&i.UserID,
+		&i.UserName,
+		&i.UserPassword,
+		&i.UserEmail,
+		&i.UserPhone,
+		&i.UserToken,
+	)
+	return &i, err
+}
+
+const updateUserPhone = `-- name: UpdateUserPhone :one
+UPDATE users SET user_phone = $1 WHERE user_id = $2
+RETURNING user_id, user_name, user_password, user_email, user_phone, user_token
+`
+
+type UpdateUserPhoneParams struct {
+	UserPhone *string `json:"user_phone"`
+	UserID    int32   `json:"user_id"`
+}
+
+func (q *Queries) UpdateUserPhone(ctx context.Context, arg UpdateUserPhoneParams) (*User, error) {
+	row := q.db.QueryRow(ctx, updateUserPhone, arg.UserPhone, arg.UserID)
 	var i User
 	err := row.Scan(
 		&i.UserID,

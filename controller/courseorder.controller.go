@@ -3,12 +3,11 @@ package controller
 import "courseonline/services"
 
 type CourseorderController struct {
-	serviceManager *services.ServiceManager
+	storedb services.Store
 }
 
-// constructor
-func NewCourseorderController(servicesManager services.ServiceManager) *CourseorderController {
+func NewCourseorderController(store services.Store) *CourseorderController {
 	return &CourseorderController{
-		serviceManager: &servicesManager,
+		storedb: store,
 	}
 }

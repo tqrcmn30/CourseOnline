@@ -6,7 +6,7 @@
 
 [database]
 
-connection_string = "host=localhost port=5432 user=postgres password=admin123 dbname=northwind_db2 sslmode=disable"
+connection_string = "host=localhost port=5432 user=postgres password=admin123 dbname=courseonline sslmode=disable"
 max_idle_connections = 5
 max_open_connections = 10
 connection_max_lifetime = "60s"
@@ -17,4 +17,11 @@ driver_name = "postgres"
 [http]
 
 server_address = ":8888"
+###############################################################################
+# jwt server configuration
+
+[jwt]
+
+api_secret="mysecret"
+token_hour_lifespan="24h"
 ###############################################################################

@@ -3,12 +3,11 @@ package controller
 import "courseonline/services"
 
 type CartController struct {
-	serviceManager *services.ServiceManager
+	storedb services.Store
 }
 
-// constructor
-func NewCartController(servicesManager services.ServiceManager) *CartController {
+func NewCartController(store services.Store) *CartController {
 	return &CartController{
-		serviceManager: &servicesManager,
+		storedb: store,
 	}
 }

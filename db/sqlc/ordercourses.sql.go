@@ -13,17 +13,16 @@ import (
 
 const createOrderCourse = `-- name: CreateOrderCourse :one
 INSERT INTO order_courses (usco_purchase_no, usco_tax, usco_subtotal, usco_patrx_no, usco_modified, usco_user_id)
-VALUES ($1, $2, $3, $4, $5, $6)
+VALUES ($1, $2, $3, $4, CURRENT_TIMESTAMP, $5)
 RETURNING usco_id, usco_purchase_no, usco_tax, usco_subtotal, usco_patrx_no, usco_modified, usco_user_id
 `
 
 type CreateOrderCourseParams struct {
-	UscoPurchaseNo *string          `json:"usco_purchase_no"`
-	UscoTax        pgtype.Numeric   `json:"usco_tax"`
-	UscoSubtotal   pgtype.Numeric   `json:"usco_subtotal"`
-	UscoPatrxNo    *string          `json:"usco_patrx_no"`
-	UscoModified   pgtype.Timestamp `json:"usco_modified"`
-	UscoUserID     *int32           `json:"usco_user_id"`
+	UscoPurchaseNo *string        `json:"usco_purchase_no"`
+	UscoTax        pgtype.Numeric `json:"usco_tax"`
+	UscoSubtotal   pgtype.Numeric `json:"usco_subtotal"`
+	UscoPatrxNo    *string        `json:"usco_patrx_no"`
+	UscoUserID     *int32         `json:"usco_user_id"`
 }
 
 func (q *Queries) CreateOrderCourse(ctx context.Context, arg CreateOrderCourseParams) (*OrderCourse, error) {
@@ -32,7 +31,6 @@ func (q *Queries) CreateOrderCourse(ctx context.Context, arg CreateOrderCoursePa
 		arg.UscoTax,
 		arg.UscoSubtotal,
 		arg.UscoPatrxNo,
-		arg.UscoModified,
 		arg.UscoUserID,
 	)
 	var i OrderCourse
@@ -110,19 +108,18 @@ func (q *Queries) GetOrderCourseByID(ctx context.Context, uscoID int32) (*OrderC
 
 const updateOrderCourse = `-- name: UpdateOrderCourse :one
 UPDATE order_courses
-SET usco_purchase_no = $2, usco_tax = $3, usco_subtotal = $4, usco_patrx_no = $5, usco_modified = $6, usco_user_id = $7
+SET usco_purchase_no = $2, usco_tax = $3, usco_subtotal = $4, usco_patrx_no = $5, usco_modified = CURRENT_TIMESTAMP, usco_user_id = $6
 WHERE usco_id = $1
 RETURNING usco_id, usco_purchase_no, usco_tax, usco_subtotal, usco_patrx_no, usco_modified, usco_user_id
 `
 
 type UpdateOrderCourseParams struct {
-	UscoID         int32            `json:"usco_id"`
-	UscoPurchaseNo *string          `json:"usco_purchase_no"`
-	UscoTax        pgtype.Numeric   `json:"usco_tax"`
-	UscoSubtotal   pgtype.Numeric   `json:"usco_subtotal"`
-	UscoPatrxNo    *string          `json:"usco_patrx_no"`
-	UscoModified   pgtype.Timestamp `json:"usco_modified"`
-	UscoUserID     *int32           `json:"usco_user_id"`
+	UscoID         int32          `json:"usco_id"`
+	UscoPurchaseNo *string        `json:"usco_purchase_no"`
+	UscoTax        pgtype.Numeric `json:"usco_tax"`
+	UscoSubtotal   pgtype.Numeric `json:"usco_subtotal"`
+	UscoPatrxNo    *string        `json:"usco_patrx_no"`
+	UscoUserID     *int32         `json:"usco_user_id"`
 }
 
 func (q *Queries) UpdateOrderCourse(ctx context.Context, arg UpdateOrderCourseParams) (*OrderCourse, error) {
@@ -132,7 +129,6 @@ func (q *Queries) UpdateOrderCourse(ctx context.Context, arg UpdateOrderCoursePa
 		arg.UscoTax,
 		arg.UscoSubtotal,
 		arg.UscoPatrxNo,
-		arg.UscoModified,
 		arg.UscoUserID,
 	)
 	var i OrderCourse

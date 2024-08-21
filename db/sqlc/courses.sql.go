@@ -13,17 +13,16 @@ import (
 
 const createCourse = `-- name: CreateCourse :one
 INSERT INTO courses (cours_name, cours_desc, cours_author, cours_price, cours_modified, cours_cate_id)
-VALUES ($1, $2, $3, $4, $5, $6)
+VALUES ($1, $2, $3, $4, CURRENT_TIMESTAMP, $5)
 RETURNING cours_id, cours_name, cours_desc, cours_author, cours_price, cours_modified, cours_cate_id
 `
 
 type CreateCourseParams struct {
-	CoursName     *string          `json:"cours_name"`
-	CoursDesc     *string          `json:"cours_desc"`
-	CoursAuthor   *string          `json:"cours_author"`
-	CoursPrice    pgtype.Numeric   `json:"cours_price"`
-	CoursModified pgtype.Timestamp `json:"cours_modified"`
-	CoursCateID   *int32           `json:"cours_cate_id"`
+	CoursName   *string        `json:"cours_name"`
+	CoursDesc   *string        `json:"cours_desc"`
+	CoursAuthor *string        `json:"cours_author"`
+	CoursPrice  pgtype.Numeric `json:"cours_price"`
+	CoursCateID *int32         `json:"cours_cate_id"`
 }
 
 func (q *Queries) CreateCourse(ctx context.Context, arg CreateCourseParams) (*Course, error) {
@@ -32,7 +31,6 @@ func (q *Queries) CreateCourse(ctx context.Context, arg CreateCourseParams) (*Co
 		arg.CoursDesc,
 		arg.CoursAuthor,
 		arg.CoursPrice,
-		arg.CoursModified,
 		arg.CoursCateID,
 	)
 	var i Course
@@ -110,19 +108,18 @@ func (q *Queries) GetCourseByID(ctx context.Context, coursID int32) (*Course, er
 
 const updateCourse = `-- name: UpdateCourse :one
 UPDATE courses
-SET cours_name = $2, cours_desc = $3, cours_author = $4, cours_price = $5, cours_modified = $6, cours_cate_id = $7
+SET cours_name = $2, cours_desc = $3, cours_author = $4, cours_price = $5, cours_modified = CURRENT_TIMESTAMP, cours_cate_id = $6
 WHERE cours_id = $1
 RETURNING cours_id, cours_name, cours_desc, cours_author, cours_price, cours_modified, cours_cate_id
 `
 
 type UpdateCourseParams struct {
-	CoursID       int32            `json:"cours_id"`
-	CoursName     *string          `json:"cours_name"`
-	CoursDesc     *string          `json:"cours_desc"`
-	CoursAuthor   *string          `json:"cours_author"`
-	CoursPrice    pgtype.Numeric   `json:"cours_price"`
-	CoursModified pgtype.Timestamp `json:"cours_modified"`
-	CoursCateID   *int32           `json:"cours_cate_id"`
+	CoursID     int32          `json:"cours_id"`
+	CoursName   *string        `json:"cours_name"`
+	CoursDesc   *string        `json:"cours_desc"`
+	CoursAuthor *string        `json:"cours_author"`
+	CoursPrice  pgtype.Numeric `json:"cours_price"`
+	CoursCateID *int32         `json:"cours_cate_id"`
 }
 
 func (q *Queries) UpdateCourse(ctx context.Context, arg UpdateCourseParams) (*Course, error) {
@@ -132,7 +129,6 @@ func (q *Queries) UpdateCourse(ctx context.Context, arg UpdateCourseParams) (*Co
 		arg.CoursDesc,
 		arg.CoursAuthor,
 		arg.CoursPrice,
-		arg.CoursModified,
 		arg.CoursCateID,
 	)
 	var i Course

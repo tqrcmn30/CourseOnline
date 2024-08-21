@@ -1,19 +1,36 @@
+-- name: FindUserByUserPassword :one
+select user_id,user_name,user_password,user_phone,user_token 
+from users  
+WHERE user_name = $1 and user_password = crypt($2, user_password);
+
+-- name: FindUserByUsername :one
+select user_id,user_name,user_password,user_phone,user_token 
+from users  
+WHERE user_name = $1;
+
+-- name: FindUserByPhone :one
+select user_id,user_name,user_password,user_phone,user_token 
+from users  
+WHERE user_phone  = $1;
+
 -- name: CreateUser :one
-INSERT INTO users (user_name, user_password, user_email, user_phone, user_token)
-VALUES ($1, $2, $3, $4, $5)
+INSERT INTO users(user_name,user_password,user_phone)
+	VALUES
+	($1, crypt($2,gen_salt('bf')),$3)
+    RETURNING *;
+
+-- name: UpdateUserName :one
+UPDATE users SET user_name = $1 WHERE user_id = $2
 RETURNING *;
 
--- name: GetUserByID :one
-SELECT * FROM users WHERE user_id = $1;
-
--- name: GetAllUsers :many
-SELECT * FROM users;
-
--- name: UpdateUser :one
-UPDATE users
-SET user_name = $2, user_password = $3, user_email = $4, user_phone = $5, user_token = $6
-WHERE user_id = $1
+-- name: UpdateUserPhone :one
+UPDATE users SET user_phone = $1 WHERE user_id = $2
 RETURNING *;
 
--- name: DeleteUser :exec
-DELETE FROM users WHERE user_id = $1;
+-- name: UpdateToken :one
+UPDATE users SET user_token = $1 WHERE user_id = $2
+RETURNING *;
+
+-- name: DeleteToken :exec
+UPDATE users SET user_token = '' WHERE user_token = $1
+RETURNING *;

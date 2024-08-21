@@ -9,11 +9,11 @@ type ControllerManager struct {
 	*UsersController
 }
 
-func NewControllerManager(serviceManager *services.ServiceManager) *ControllerManager {
+func NewControllerManager(store services.Store) *ControllerManager {
 	return &ControllerManager{
-		CartController:        NewCartController(*serviceManager),
-		CourseController:      NewCourseController(*serviceManager),
-		CourseorderController: NewCourseorderController(*serviceManager),
-		UsersController:       NewUsersController(*serviceManager),
+		CartController:        NewCartController(store),
+		CourseController:      NewCourseController(store),
+		CourseorderController: NewCourseorderController(store),
+		UsersController:       NewUsersController(store),
 	}
 }
