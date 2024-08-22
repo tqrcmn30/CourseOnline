@@ -21,7 +21,7 @@ type CreateCourseParams struct {
 	CoursName   *string        `json:"cours_name"`
 	CoursDesc   *string        `json:"cours_desc"`
 	CoursAuthor *string        `json:"cours_author"`
-	CoursPrice  pgtype.Numeric `json:"cours_price"`
+	CoursPrice  *float32 `json:"cours_price"`
 	CoursCateID *int32         `json:"cours_cate_id"`
 }
 
@@ -87,6 +87,54 @@ func (q *Queries) GetAllCourses(ctx context.Context) ([]*Course, error) {
 	return items, nil
 }
 
+const getAllCoursesPaging = `-- name: GetAllCoursesPaging :many
+SELECT cours_name, cours_desc, cours_author, cours_price, cours_modified, cours_cate_id
+FROM courses
+ORDER BY cours_id
+LIMIT $1 OFFSET $2
+`
+
+type GetAllCoursesPagingParams struct {
+	Limit  int32 `json:"limit"`
+	Offset int32 `json:"offset"`
+}
+
+type GetAllCoursesPagingRow struct {
+	CoursName     *string          `json:"cours_name"`
+	CoursDesc     *string          `json:"cours_desc"`
+	CoursAuthor   *string          `json:"cours_author"`
+	CoursPrice    *float32   `json:"cours_price"`
+	CoursModified pgtype.Timestamp `json:"cours_modified"`
+	CoursCateID   *int32           `json:"cours_cate_id"`
+}
+
+func (q *Queries) GetAllCoursesPaging(ctx context.Context, arg GetAllCoursesPagingParams) ([]*GetAllCoursesPagingRow, error) {
+	rows, err := q.db.Query(ctx, getAllCoursesPaging, arg.Limit, arg.Offset)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []*GetAllCoursesPagingRow
+	for rows.Next() {
+		var i GetAllCoursesPagingRow
+		if err := rows.Scan(
+			&i.CoursName,
+			&i.CoursDesc,
+			&i.CoursAuthor,
+			&i.CoursPrice,
+			&i.CoursModified,
+			&i.CoursCateID,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, &i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const getCourseByID = `-- name: GetCourseByID :one
 SELECT cours_id, cours_name, cours_desc, cours_author, cours_price, cours_modified, cours_cate_id FROM courses WHERE cours_id = $1
 `
@@ -118,7 +166,7 @@ type UpdateCourseParams struct {
 	CoursName   *string        `json:"cours_name"`
 	CoursDesc   *string        `json:"cours_desc"`
 	CoursAuthor *string        `json:"cours_author"`
-	CoursPrice  pgtype.Numeric `json:"cours_price"`
+	CoursPrice  *float32 `json:"cours_price"`
 	CoursCateID *int32         `json:"cours_cate_id"`
 }
 

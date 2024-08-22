@@ -10,29 +10,44 @@ import (
 
 type Querier interface {
 	CreateCart(ctx context.Context, arg CreateCartParams) (*Cart, error)
+	CreateCategory(ctx context.Context, CateName *string) (*Category, error)
 	CreateCourse(ctx context.Context, arg CreateCourseParams) (*Course, error)
+	CreateCourseImage(ctx context.Context, arg CreateCourseImageParams) (*CoursesImage, error)
 	CreateOrderCourse(ctx context.Context, arg CreateOrderCourseParams) (*OrderCourse, error)
+	CreateOrderCoursesDetail(ctx context.Context, arg CreateOrderCoursesDetailParams) (*OrderCoursesDetail, error)
 	CreateUser(ctx context.Context, arg CreateUserParams) (*User, error)
 	DeleteCart(ctx context.Context, cartID int32) error
+	DeleteCategory(ctx context.Context, cateID int32) error
 	DeleteCourse(ctx context.Context, coursID int32) error
+	DeleteCourseImage(ctx context.Context, coimID int32) error
 	DeleteOrderCourse(ctx context.Context, uscoID int32) error
+	DeleteOrderCoursesDetail(ctx context.Context, ucdeID int32) error
 	DeleteToken(ctx context.Context, userToken *string) error
 	FindUserByPhone(ctx context.Context, userPhone *string) (*FindUserByPhoneRow, error)
 	FindUserByUserPassword(ctx context.Context, arg FindUserByUserPasswordParams) (*FindUserByUserPasswordRow, error)
 	FindUserByUsername(ctx context.Context, userName *string) (*FindUserByUsernameRow, error)
 	GetAllCarts(ctx context.Context) ([]*Cart, error)
+	GetAllCategories(ctx context.Context) ([]*Category, error)
+	GetAllCourseImages(ctx context.Context) ([]*CoursesImage, error)
 	GetAllCourses(ctx context.Context) ([]*Course, error)
+	GetAllCoursesPaging(ctx context.Context, arg GetAllCoursesPagingParams) ([]*GetAllCoursesPagingRow, error)
 	GetAllOrderCourses(ctx context.Context) ([]*OrderCourse, error)
+	GetAllOrderCoursesDetails(ctx context.Context) ([]*OrderCoursesDetail, error)
 	GetCartByID(ctx context.Context, cartID int32) (*Cart, error)
+	GetCategoryByID(ctx context.Context, cateID int32) (*Category, error)
 	GetCourseByID(ctx context.Context, coursID int32) (*Course, error)
+	GetCourseImageByID(ctx context.Context, coimID int32) (*CoursesImage, error)
 	GetOrderCourseByID(ctx context.Context, uscoID int32) (*OrderCourse, error)
+	GetOrderCoursesDetailByID(ctx context.Context, ucdeID int32) (*OrderCoursesDetail, error)
 	UpdateCart(ctx context.Context, arg UpdateCartParams) (*Cart, error)
+	UpdateCategory(ctx context.Context, arg UpdateCategoryParams) (*Category, error)
 	UpdateCourse(ctx context.Context, arg UpdateCourseParams) (*Course, error)
+	UpdateCourseImage(ctx context.Context, arg UpdateCourseImageParams) (*CoursesImage, error)
 	UpdateOrderCourse(ctx context.Context, arg UpdateOrderCourseParams) (*OrderCourse, error)
+	UpdateOrderCoursesDetail(ctx context.Context, arg UpdateOrderCoursesDetailParams) (*OrderCoursesDetail, error)
 	UpdateToken(ctx context.Context, arg UpdateTokenParams) (*User, error)
 	UpdateUserName(ctx context.Context, arg UpdateUserNameParams) (*User, error)
 	UpdateUserPhone(ctx context.Context, arg UpdateUserPhoneParams) (*User, error)
 }
 
 var _ Querier = (*Queries)(nil)
-

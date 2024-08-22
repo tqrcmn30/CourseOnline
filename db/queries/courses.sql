@@ -9,6 +9,12 @@ SELECT * FROM courses WHERE cours_id = $1;
 -- name: GetAllCourses :many
 SELECT * FROM courses;
 
+-- name: GetAllCoursesPaging :many
+SELECT cours_name, cours_desc, cours_author, cours_price, cours_modified, cours_cate_id
+FROM courses
+ORDER BY cours_id
+LIMIT $1 OFFSET $2;
+
 -- name: UpdateCourse :one
 UPDATE courses
 SET cours_name = $2, cours_desc = $3, cours_author = $4, cours_price = $5, cours_modified = CURRENT_TIMESTAMP, cours_cate_id = $6
