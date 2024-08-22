@@ -50,3 +50,50 @@ type CourseImagesUpdateReq struct {
 	CoimDefault  *string `json:"coim_default"`
 	CoimRemeID   *int32  `json:"coim_reme_id"`
 }
+
+type OrderCoursesDetailPostReq struct {
+	UcdeQty        *int32   `json:"ucde_qty"`
+	UcdePrice      *float32 `json:"ucde_price"`
+	UcdeTotalPrice *float32 `json:"ucde_total_price"`
+	UcdeUscoID     *int32   `json:"ucde_usco_id"`
+	UcdeCoursID    *int32   `json:"ucde_cours_id"`
+}
+
+type OrderCoursesDetailUpdateReq struct {
+	UcdeID         int32    `json:"ucde_id"`
+	UcdeQty        *int32   `json:"ucde_qty"`
+	UcdePrice      *float32 `json:"ucde_price"`
+	UcdeTotalPrice *float32 `json:"ucde_total_price"`
+	UcdeUscoID     *int32   `json:"ucde_usco_id"`
+	UcdeCoursID    *int32   `json:"ucde_cours_id"`
+}
+
+type OrderCoursePostReq struct {
+	UscoPurchaseNo *string  `json:"usco_purchase_no"`
+	UscoTax        *float32 `json:"usco_tax"`
+	UscoSubtotal   *float32 `json:"usco_subtotal"`
+	UscoPatrxNo    *string  `json:"usco_patrx_no"`
+	UscoUserID     *int32   `json:"usco_user_id"`
+}
+
+type OrderCourseUpdateReq struct {
+	UscoID         int32    `json:"usco_id"`
+	UscoPurchaseNo *string  `json:"usco_purchase_no"`
+	UscoTax        *float32 `json:"usco_tax"`
+	UscoSubtotal   *float32 `json:"usco_subtotal"`
+	UscoPatrxNo    *string  `json:"usco_patrx_no"`
+	UscoUserID     *int32   `json:"usco_user_id"`
+}
+
+type CourseImagePostReq struct {
+	CoimFilename *string `form:"coim_filename"`
+	CoimDefault  *string `form:"coim_default"`
+	CoimRemeID   *int32  `form:"coim_reme_id"`
+}
+
+type CourseImageUpdateReq struct {
+	CoimID       int32   `form:"coim_id"`
+	CoimFilename *string `form:"coim_filename"`
+	CoimDefault  *string `form:"coim_default"`
+	CoimRemeID   *int32  `form:"coim_reme_id"`
+}

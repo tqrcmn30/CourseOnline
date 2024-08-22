@@ -8,7 +8,6 @@ package db
 import (
 	"context"
 
-	"github.com/jackc/pgx/v5/pgtype"
 )
 
 const createOrderCourse = `-- name: CreateOrderCourse :one
@@ -19,8 +18,8 @@ RETURNING usco_id, usco_purchase_no, usco_tax, usco_subtotal, usco_patrx_no, usc
 
 type CreateOrderCourseParams struct {
 	UscoPurchaseNo *string        `json:"usco_purchase_no"`
-	UscoTax        pgtype.Numeric `json:"usco_tax"`
-	UscoSubtotal   pgtype.Numeric `json:"usco_subtotal"`
+	UscoTax        *float32 `json:"usco_tax"`
+	UscoSubtotal   *float32 `json:"usco_subtotal"`
 	UscoPatrxNo    *string        `json:"usco_patrx_no"`
 	UscoUserID     *int32         `json:"usco_user_id"`
 }
@@ -116,8 +115,8 @@ RETURNING usco_id, usco_purchase_no, usco_tax, usco_subtotal, usco_patrx_no, usc
 type UpdateOrderCourseParams struct {
 	UscoID         int32          `json:"usco_id"`
 	UscoPurchaseNo *string        `json:"usco_purchase_no"`
-	UscoTax        pgtype.Numeric `json:"usco_tax"`
-	UscoSubtotal   pgtype.Numeric `json:"usco_subtotal"`
+	UscoTax        *float32 `json:"usco_tax"`
+	UscoSubtotal   *float32 `json:"usco_subtotal"`
 	UscoPatrxNo    *string        `json:"usco_patrx_no"`
 	UscoUserID     *int32         `json:"usco_user_id"`
 }
