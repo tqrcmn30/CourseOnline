@@ -38,3 +38,15 @@ type CourseUpdateReq struct {
 	CoursPrice  *float32 `json:"cours_price"`
 	CoursCateID *int32   `json:"cours_cate_id"`
 }
+
+type CourseImagesPostReq struct {
+	CoimFilename *string `json:"coim_filename"`
+	CoimDefault  *string `json:"coim_default"`
+	CoimRemeID   *int32  `json:"coim_reme_id"`
+}
+
+type CourseImagesUpdateReq struct {
+	CoimFilename *string `json:"coim_filename"`
+	CoimDefault  *string `json:"coim_default"`
+	CoimRemeID   *int32  `json:"coim_reme_id"`
+}
