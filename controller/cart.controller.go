@@ -100,7 +100,8 @@ func (ct *CartController) FindCartByCustomerAndProduct(c *gin.Context) {
 
 func (ct *CartController) FindCartByCartUserID(c *gin.Context) {
 	id, _ := strconv.Atoi(c.Param("id"))
-	carts, err := ct.storedb.GetCartByUserID(c, int32(id))
+	Userid := int32(id)
+	carts, err := ct.storedb.GetCartByUserID(c, &Userid)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, models.NewError(err))
 		return
