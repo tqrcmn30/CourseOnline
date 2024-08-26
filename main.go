@@ -34,8 +34,8 @@ func main() {
 func getConfigFileName() string {
 	env := os.Getenv("ENV")
 	if env != "" {
-		return "Courseonline-" + env
+		return "northwind-" + env
 	}
 
-	return "Courseonline"
+	return "northwind"
 }

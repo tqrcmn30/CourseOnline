@@ -4,15 +4,28 @@ VALUES ($1, $2, $3, $4, CURRENT_TIMESTAMP, $5, $6)
 RETURNING *;
 
 -- name: GetCartByID :one
-SELECT * FROM carts WHERE cart_id = $1;
+SELECT * FROM carts cr 
+JOIN user on cr.cart_user_id=cu.cart_user_id
+JOIN courses on cr.cart_course_id=cu.cart_cours_id
+WHERE cart_id = $1;
+
+-- name: GetCartByUserID :many
+SELECT * FROM carts cr 
+JOIN user on cr.cart_user_id=cu.cart_user_id
+JOIN courses on cr.cart_course_id=cu.cart_cours_id
+WHERE cart_user_id = $1;
+
+-- name: GetCartByUserandCourse :one
+SELECT * FROM carts
+WHERE cart_user_id = $1 and cart_cours_id = $2 LIMIT 1;
 
 -- name: GetAllCarts :many
 SELECT * FROM carts;
 
 -- name: UpdateCart :one
 UPDATE carts
-SET cart_user_id = $2, cart_cours_id = $3, cart_qty = $4, cart_price = $5, cart_modified = CURRENT_TIMESTAMP, cart_status = $6, cart_cart_id = $7
-WHERE cart_id = $1
+SET cart_qty = $1
+WHERE cart_id = $2
 RETURNING *;
 
 -- name: DeleteCart :exec

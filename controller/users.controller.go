@@ -30,6 +30,7 @@ func (uc *UsersController) Signup(c *gin.Context) {
 	args := &models.CreateUserReq{
 		UserName:     payload.UserName,
 		UserPassword: payload.UserPassword,
+		UserPhone:    payload.UserPhone,
 	}
 	user, err := uc.storedb.Signup(c, *args)
 
@@ -50,6 +51,7 @@ func (uc *UsersController) Sigin(c *gin.Context) {
 	args := &models.CreateUserReq{
 		UserName:     payload.UserName,
 		UserPassword: payload.UserPassword,
+		UserPhone:    payload.UserPhone,
 	}
 	user, err := uc.storedb.Signin(c, *args)
 
@@ -78,7 +80,7 @@ func (uc *UsersController) GetProfile(c *gin.Context) {
 	token := middleware.GetJWTFromHeader(c)
 	//token := ""
 	if token != "" {
-		userID = "" //uc.serviceManager.GetIDFromToken(token)
+		userID = middleware.GetIDFromToken(token)
 	}
 
 	foundUser, err := uc.storedb.FindUserByUsername(context.Background(), &userID)
@@ -91,6 +93,7 @@ func (uc *UsersController) GetProfile(c *gin.Context) {
 		UserID:    foundUser.UserID,
 		UserName:  foundUser.UserName,
 		UserPhone: foundUser.UserPhone,
+		UserToken: foundUser.UserToken,
 	}
 
 	c.JSON(http.StatusOK, profile)

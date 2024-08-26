@@ -3,6 +3,7 @@ package models
 type CreateUserReq struct {
 	UserName     *string `json:"user_name" binding:"required"`
 	UserPassword *string `json:"user_password" binding:"required"`
+	UserPhone    *string `json:"user_phone"`
 }
 
 type UserResponse struct {
@@ -85,15 +86,31 @@ type OrderCourseUpdateReq struct {
 	UscoUserID     *int32   `json:"usco_user_id"`
 }
 
-type CourseImagePostReq struct {
-	CoimFilename *string `form:"coim_filename"`
-	CoimDefault  *string `form:"coim_default"`
-	CoimRemeID   *int32  `form:"coim_reme_id"`
+type CartPostReq struct {
+	CartUserID  *int32   `json:"cart_user_id"`
+	CartCoursID *int32   `json:"cart_cours_id"`
+	CartQty     *int32   `json:"cart_qty"`
+	CartPrice   *float32 `json:"cart_price"`
+	CartStatus  *string  `json:"cart_status"`
+	CartCartID  *int32   `json:"cart_cart_id"`
 }
 
-type CourseImageUpdateReq struct {
-	CoimID       int32   `form:"coim_id"`
-	CoimFilename *string `form:"coim_filename"`
-	CoimDefault  *string `form:"coim_default"`
-	CoimRemeID   *int32  `form:"coim_reme_id"`
+type CartResponse struct {
+	CartID      int32                 `json:"cart_id"`
+	CartUserID  *int32                `json:"cart_user_id"`
+	CartCoursID *int32                `json:"cart_cours_id"`
+	Course      []*CartCourseResponse `json:"course"`
+}
+
+type CartCourseResponse struct {
+	CoursID     *int32   `json:"cours_id"`
+	CoursName   *string  `json:"cours_name"`
+	CoursAuthor *string  `json:"cours_author"`
+	CoursPrice  *float32 `json:"cours_price"`
+	Qty         *int32   `json:"qty"`
+}
+
+type CartUpdateUpdateReq struct {
+	CartQty *int32 `json:"cart_qty"`
+	CartID  int32  `json:"cart_id"`
 }

@@ -15,9 +15,8 @@ VALUES ($1)
 RETURNING cate_id, cate_name
 `
 
-
-func (q *Queries) CreateCategory(ctx context.Context, CateName *string) (*Category, error) {
-	row := q.db.QueryRow(ctx, createCategory, CateName)
+func (q *Queries) CreateCategory(ctx context.Context, cateName *string) (*Category, error) {
+	row := q.db.QueryRow(ctx, createCategory, cateName)
 	var i Category
 	err := row.Scan(&i.CateID, &i.CateName)
 	return &i, err

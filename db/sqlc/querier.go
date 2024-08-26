@@ -10,7 +10,7 @@ import (
 
 type Querier interface {
 	CreateCart(ctx context.Context, arg CreateCartParams) (*Cart, error)
-	CreateCategory(ctx context.Context, CateName *string) (*Category, error)
+	CreateCategory(ctx context.Context, cateName *string) (*Category, error)
 	CreateCourse(ctx context.Context, arg CreateCourseParams) (*Course, error)
 	CreateCourseImage(ctx context.Context, arg CreateCourseImageParams) (*CoursesImage, error)
 	CreateOrderCourse(ctx context.Context, arg CreateOrderCourseParams) (*OrderCourse, error)
@@ -33,7 +33,9 @@ type Querier interface {
 	GetAllCoursesPaging(ctx context.Context, arg GetAllCoursesPagingParams) ([]*GetAllCoursesPagingRow, error)
 	GetAllOrderCourses(ctx context.Context) ([]*OrderCourse, error)
 	GetAllOrderCoursesDetails(ctx context.Context) ([]*OrderCoursesDetail, error)
-	GetCartByID(ctx context.Context, cartID int32) (*Cart, error)
+	GetCartByID(ctx context.Context, cartID int32) (*GetCartByIDRow, error)
+	GetCartByUserID(ctx context.Context, cartUserID *int32) ([]*GetCartByUserIDRow, error)
+	GetCartByUserandCourse(ctx context.Context, arg GetCartByUserandCourseParams) (*Cart, error)
 	GetCategoryByID(ctx context.Context, cateID int32) (*Category, error)
 	GetCourseByID(ctx context.Context, coursID int32) (*Course, error)
 	GetCourseImageByID(ctx context.Context, coimID int32) (*CoursesImage, error)

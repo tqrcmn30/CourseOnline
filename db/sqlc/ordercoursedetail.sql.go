@@ -8,7 +8,7 @@ package db
 import (
 	"context"
 
-
+	
 )
 
 const createOrderCoursesDetail = `-- name: CreateOrderCoursesDetail :one
@@ -19,8 +19,8 @@ RETURNING ucde_id, ucde_qty, ucde_price, ucde_total_price, ucde_usco_id, ucde_co
 
 type CreateOrderCoursesDetailParams struct {
 	UcdeQty        *int32         `json:"ucde_qty"`
-	UcdePrice      *float32 `json:"ucde_price"`
-	UcdeTotalPrice *float32 `json:"ucde_total_price"`
+	UcdePrice      *float32`json:"ucde_price"`
+	UcdeTotalPrice *float32`json:"ucde_total_price"`
 	UcdeUscoID     *int32         `json:"ucde_usco_id"`
 	UcdeCoursID    *int32         `json:"ucde_cours_id"`
 }
@@ -113,8 +113,8 @@ RETURNING ucde_id, ucde_qty, ucde_price, ucde_total_price, ucde_usco_id, ucde_co
 type UpdateOrderCoursesDetailParams struct {
 	UcdeID         int32          `json:"ucde_id"`
 	UcdeQty        *int32         `json:"ucde_qty"`
-	UcdePrice      *float32 `json:"ucde_price"`
-	UcdeTotalPrice *float32 `json:"ucde_total_price"`
+	UcdePrice      *float32`json:"ucde_price"`
+	UcdeTotalPrice *float32`json:"ucde_total_price"`
 	UcdeUscoID     *int32         `json:"ucde_usco_id"`
 	UcdeCoursID    *int32         `json:"ucde_cours_id"`
 }
