@@ -9,6 +9,7 @@ type ControllerManager struct {
 	*CategoryController
 	*CourseimagesController
 	*CourseodController
+	*CartController
 }
 
 func NewControllerManager(store services.Store) *ControllerManager {
@@ -19,5 +20,6 @@ func NewControllerManager(store services.Store) *ControllerManager {
 		CategoryController:     NewCategoryController(store),
 		CourseimagesController: NewCourseimagesController(store),
 		CourseodController:     NewCourseodController(store),
+		CartController:         NewCartController(store),
 	}
 }

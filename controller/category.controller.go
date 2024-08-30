@@ -69,7 +69,10 @@ func (cate *CategoryController) UpdateCategory(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, models.NewError(err))
 		return
 	}
-
+	if category == nil {
+		c.JSON(http.StatusNotFound, models.NewError(models.ErrCategoryNotFound))
+		return
+	}
 	c.JSON(http.StatusOK, category)
 
 }
@@ -96,4 +99,20 @@ func (cate *CategoryController) DeleteCategory(c *gin.Context) {
 	}
 	c.JSON(http.StatusNoContent, gin.H{"status": "success", "message": "data has been deleted"})
 
+}
+
+func (cate *CategoryController) GetCategoryById(c *gin.Context) {
+	id, _ := strconv.Atoi(c.Param("id"))
+	category, err := models.Nullable(cate.storedb.GetCategoryByID(c, int32(id)))
+
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, models.NewError(err))
+		return
+	}
+	if category == nil {
+		c.JSON(http.StatusNotFound, models.NewError(models.ErrCategoryNotFound))
+		return
+	}
+
+	c.JSON(http.StatusOK, category)
 }

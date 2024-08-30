@@ -25,14 +25,15 @@ func NewCourseimagesController(store services.Store) *CourseimagesController {
 }
 
 type CourseImagePostReq struct {
-	Filename    *SingleFileUpload
-	CoimDefault *string `form:"coim_default"`
-	CoimRemeID  *int32  `form:"coim_reme_id"`
+	//Filename    *SingleFileUpload
+	Filename    []*multipart.FileHeader `form:"filename" binding:"required"`
+	CoimDefault *string                 `form:"coim_default"`
+	CoimRemeID  *int32                  `form:"coim_reme_id"`
 }
 
 type CourseImageUpdateReq struct {
 	CoimID       int32   `form:"coim_id"`
-	CoimFilename *string `json:"coim_filename"`
+	CoimFilename *string `form:"coim_filename"`
 	Filename     *SingleFileUpload
 	CoimDefault  *string `form:"coim_default"`
 	CoimRemeID   *int32  `form:"coim_reme_id"`
@@ -40,6 +41,38 @@ type CourseImageUpdateReq struct {
 
 type SingleFileUpload struct {
 	Filename *multipart.FileHeader `form:"filename" binding:"required"`
+}
+
+type MultipleFileUpload struct {
+	Filename []*multipart.FileHeader `form:"filename" binding:"required"`
+}
+
+func (ci *CourseimagesController) UploadMultipleProductImage(c *gin.Context) {
+	form, err := c.MultipartForm()
+	if err != nil {
+		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{
+			"message": "No file is received",
+		})
+		return
+	}
+
+	files := form.File["filename"]
+
+	for _, v := range files {
+		extension := filepath.Ext(v.Filename)
+		// Generate random file name for the new uploaded file so it doesn't override the old file with same name
+		newFileName := uuid.New().String() + extension
+
+		// The file is received, so let's save it
+		if err := c.SaveUploadedFile(v, "./public/"+newFileName); err != nil {
+			c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{
+				"message": "Unable to save the file",
+			})
+			return
+		}
+	}
+
+	c.JSON(http.StatusCreated, gin.H{"status": "ok", "message": "multiple product has been uploaded."})
 }
 
 func (ci *CourseimagesController) CreateCourseimages(c *gin.Context) {

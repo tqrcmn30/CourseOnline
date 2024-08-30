@@ -38,16 +38,17 @@ func CreateRouter(handlers *controller.ControllerManager, mode string) *gin.Engi
 
 	categoryRoute := api.Group("/category")
 	{
-		categoryRoute.Use(middleware.AuthMiddleware())
+		//categoryRoute.Use(middleware.AuthMiddleware())
 		categoryRoute.GET("/", handlers.GetListCategory)
 		categoryRoute.POST("/", handlers.PostCategory)
 		categoryRoute.PUT("/:id", handlers.UpdateCategory)
+		categoryRoute.GET("/:id", handlers.GetCategoryById)
 
 	}
 
 	courseRoute := api.Group("/course")
 	{
-		courseRoute.Use(middleware.AuthMiddleware())
+		//courseRoute.Use(middleware.AuthMiddleware())
 		courseRoute.GET("/", handlers.GetListCourse)
 		courseRoute.POST("/", handlers.PostCourse)
 		courseRoute.GET("/:id", handlers.GetCourseById)
@@ -62,7 +63,7 @@ func CreateRouter(handlers *controller.ControllerManager, mode string) *gin.Engi
 		courseimageRoute.POST("/", handlers.CreateCourseimages)
 		courseimageRoute.GET("/:id", handlers.FindCourseImageByID)
 		courseimageRoute.PUT("/:id", handlers.UpdateCourseImage)
-		courseRoute.DELETE("/:id", handlers.DeleteCourseImage)
+		courseimageRoute.DELETE("/:id", handlers.DeleteCourseImage)
 	}
 
 	userRoute := api.Group("/user")
@@ -71,6 +72,23 @@ func CreateRouter(handlers *controller.ControllerManager, mode string) *gin.Engi
 		userRoute.POST("/signin", handlers.Sigin)
 		userRoute.POST("/signout", handlers.Signout)
 		userRoute.GET("/profile", handlers.GetProfile)
+	}
+
+	cartRoute := api.Group("/cart")
+	{
+		cartRoute.POST("/", handlers.AddToCart)
+		cartRoute.GET("/", handlers.FindAllCart)
+		cartRoute.GET("/:id", handlers.FindCartById)
+		cartRoute.POST("/order", handlers.CreateCart)
+		cartRoute.GET("/user:id", handlers.FindCartByCartUserID)
+	}
+
+	ordercoursedetailRoute := api.Group("/detail")
+	{
+		ordercoursedetailRoute.GET("/", handlers.GetListOrderCourseDetail)
+		ordercoursedetailRoute.POST("/", handlers.PostOrderCourseDetail)
+		ordercoursedetailRoute.PUT("/:id", handlers.UpdateOrderCourseDetail)
+		ordercoursedetailRoute.DELETE("/:id", handlers.DeleteOrderCourseDetail)
 	}
 
 	return router

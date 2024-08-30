@@ -21,7 +21,7 @@ func NewCourseodController(store services.Store) *CourseodController {
 	}
 }
 
-func (orde *CourseodController) GetListOrderCourse(c *gin.Context) {
+func (orde *CourseodController) GetListOrderCourseDetail(c *gin.Context) {
 	OrderCourse, err := orde.storedb.GetAllOrderCoursesDetails(c)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, models.NewError(err))

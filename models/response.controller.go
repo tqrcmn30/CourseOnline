@@ -15,16 +15,16 @@ type UserResponse struct {
 }
 
 type CategoryUpdateReq struct {
-	CateID   int32   `json:"cate_id"`
-	CateName *string `json:"cate_name"`
+	CateID   int32   `json:"cate_id" `
+	CateName *string `json:"cate_name" `
 }
 
 type CategoryPostReq struct {
-	CateName *string `json:"cate_name"`
+	CateName *string `json:"cate_name" binding:"required"`
 }
 
 type CoursePostReq struct {
-	CoursName   *string  `json:"cours_name"`
+	CoursName   *string  `json:"cours_name" binding:"required"`
 	CoursDesc   *string  `json:"cours_desc"`
 	CoursAuthor *string  `json:"cours_author"`
 	CoursPrice  *float32 `json:"cours_price"`
@@ -41,19 +41,20 @@ type CourseUpdateReq struct {
 }
 
 type CourseImagesPostReq struct {
-	CoimFilename *string `json:"coim_filename"`
+	CoimFilename *string `json:"coim_filename" binding:"required"`
 	CoimDefault  *string `json:"coim_default"`
 	CoimRemeID   *int32  `json:"coim_reme_id"`
 }
 
 type CourseImagesUpdateReq struct {
+	CoimID       int32   `json:"coim_id"`
 	CoimFilename *string `json:"coim_filename"`
 	CoimDefault  *string `json:"coim_default"`
 	CoimRemeID   *int32  `json:"coim_reme_id"`
 }
 
 type OrderCoursesDetailPostReq struct {
-	UcdeQty        *int32   `json:"ucde_qty"`
+	UcdeQty        *int32   `json:"ucde_qty" binding:"required"`
 	UcdePrice      *float32 `json:"ucde_price"`
 	UcdeTotalPrice *float32 `json:"ucde_total_price"`
 	UcdeUscoID     *int32   `json:"ucde_usco_id"`
@@ -70,7 +71,7 @@ type OrderCoursesDetailUpdateReq struct {
 }
 
 type OrderCoursePostReq struct {
-	UscoPurchaseNo *string  `json:"usco_purchase_no"`
+	UscoPurchaseNo *string  `json:"usco_purchase_no" binding:"required"`
 	UscoTax        *float32 `json:"usco_tax"`
 	UscoSubtotal   *float32 `json:"usco_subtotal"`
 	UscoPatrxNo    *string  `json:"usco_patrx_no"`
@@ -87,7 +88,7 @@ type OrderCourseUpdateReq struct {
 }
 
 type CartPostReq struct {
-	CartUserID  *int32   `json:"cart_user_id"`
+	CartUserID  *int32   `json:"cart_user_id" binding:"required"`
 	CartCoursID *int32   `json:"cart_cours_id"`
 	CartQty     *int32   `json:"cart_qty"`
 	CartPrice   *float32 `json:"cart_price"`
@@ -110,7 +111,7 @@ type CartCourseResponse struct {
 	Qty         *int32   `json:"qty"`
 }
 
-type CartUpdateUpdateReq struct {
+type CartUpdateReq struct {
 	CartQty *int32 `json:"cart_qty"`
 	CartID  int32  `json:"cart_id"`
 }
