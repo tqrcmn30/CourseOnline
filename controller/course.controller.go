@@ -30,7 +30,7 @@ func (cour *CourseController) GetCourseById(c *gin.Context) {
 		return
 	}
 	if course == nil {
-		c.JSON(http.StatusNotFound, models.NewError(err))
+		c.JSON(http.StatusNotFound, models.NewError(models.ErrCourseNotFound))
 		return
 	}
 
@@ -95,6 +95,10 @@ func (cour *CourseController) UpdateCourse(c *gin.Context) {
 	if err != nil {
 
 		c.JSON(http.StatusInternalServerError, models.NewError(err))
+		return
+	}
+	if Course == nil {
+		c.JSON(http.StatusNotFound, models.NewError(models.ErrCourseNotFound))
 		return
 	}
 

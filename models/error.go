@@ -3,8 +3,8 @@ package models
 import (
 	"errors"
 
-	"github.com/jackc/pgconn"
 	"github.com/jackc/pgx/v5"
+	"github.com/jackc/pgx/v5/pgconn"
 )
 
 var (
@@ -23,6 +23,9 @@ var (
 	/*category*/
 	ErrCategoryNameDuplicate = errors.New("duplicate category name")
 	ErrCategoryNotFound      = errors.New("category not found")
+	/*courses*/
+	ErrCourseNameDuplicate = errors.New("duplicate course name")
+	ErrCourseNotFound      = errors.New("course not found")
 )
 
 type Error struct {
@@ -83,7 +86,9 @@ func ConvertToApiErr(err error) error {
 	var pgErr *pgconn.PgError
 	if errors.As(err, &pgErr) {
 		switch pgErr.ConstraintName {
-		case "category_name_uq":
+		case "cours_name_uq":
+			return ErrCourseNameDuplicate
+		case "cate_name_uq":
 			return ErrCategoryNameDuplicate
 		case "user_name_uq":
 			return ErrUserAlreadyExist
