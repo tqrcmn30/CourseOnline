@@ -94,10 +94,6 @@ func (ct *CartController) DeleteCart(c *gin.Context) error {
 	panic("not implemented") // TODO: Implement
 }
 
-func (ct *CartController) FindCartByCustomerAndProduct(c *gin.Context) {
-	panic("not implemented") // TODO: Implement
-}
-
 func (ct *CartController) FindCartByCartUserID(c *gin.Context) {
 	id, _ := strconv.Atoi(c.Param("id"))
 	Userid := int32(id)
@@ -151,7 +147,7 @@ func (ct *CartController) FindAllCart(c *gin.Context) {
 	c.JSON(http.StatusOK, Carts)
 }
 
-func (ct *CartController) CreateCart(c *gin.Context) {
+func (ct *CartController) CreateOrderCart(c *gin.Context) {
 	var payload models.OrderCoursePostReq
 	if err := c.ShouldBindJSON(&payload); err != nil {
 		c.JSON(http.StatusUnprocessableEntity, models.NewValidationError(err))
@@ -162,6 +158,8 @@ func (ct *CartController) CreateCart(c *gin.Context) {
 		UscoPurchaseNo: payload.UscoPurchaseNo,
 		UscoTax:        payload.UscoTax,
 		UscoSubtotal:   payload.UscoSubtotal,
+		UscoPatrxNo:    payload.UscoPatrxNo,
+		UscoUserID:     payload.UscoUserID,
 	}
 
 	newCart, err := ct.storedb.CreateCartTx(c, *args)

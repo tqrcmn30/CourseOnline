@@ -12,8 +12,8 @@ import (
 )
 
 const createCart = `-- name: CreateCart :one
-INSERT INTO carts (cart_user_id, cart_cours_id, cart_qty, cart_price, cart_modified, cart_status, cart_cart_id)
-VALUES ($1, $2, $3, $4, CURRENT_TIMESTAMP, $5, $6)
+INSERT INTO carts (cart_user_id, cart_cours_id, cart_qty, cart_price, cart_modified, cart_status)
+VALUES ($1, $2, $3, $4, CURRENT_TIMESTAMP, $5)
 RETURNING cart_id, cart_user_id, cart_cours_id, cart_qty, cart_price, cart_modified, cart_status, cart_cart_id
 `
 
@@ -23,7 +23,6 @@ type CreateCartParams struct {
 	CartQty     *int32         `json:"cart_qty"`
 	CartPrice   *float32 `json:"cart_price"`
 	CartStatus  *string        `json:"cart_status"`
-	CartCartID  *int32         `json:"cart_cart_id"`
 }
 
 func (q *Queries) CreateCart(ctx context.Context, arg CreateCartParams) (*Cart, error) {
@@ -33,7 +32,6 @@ func (q *Queries) CreateCart(ctx context.Context, arg CreateCartParams) (*Cart, 
 		arg.CartQty,
 		arg.CartPrice,
 		arg.CartStatus,
-		arg.CartCartID,
 	)
 	var i Cart
 	err := row.Scan(

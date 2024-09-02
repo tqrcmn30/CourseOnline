@@ -38,7 +38,7 @@ func CreateRouter(handlers *controller.ControllerManager, mode string) *gin.Engi
 
 	categoryRoute := api.Group("/category")
 	{
-		//categoryRoute.Use(middleware.AuthMiddleware())
+		categoryRoute.Use(middleware.AuthMiddleware())
 		categoryRoute.GET("/", handlers.GetListCategory)
 		categoryRoute.POST("/", handlers.PostCategory)
 		categoryRoute.PUT("/:id", handlers.UpdateCategory)
@@ -48,7 +48,7 @@ func CreateRouter(handlers *controller.ControllerManager, mode string) *gin.Engi
 
 	courseRoute := api.Group("/course")
 	{
-		//courseRoute.Use(middleware.AuthMiddleware())
+		courseRoute.Use(middleware.AuthMiddleware())
 		courseRoute.GET("/", handlers.GetListCourse)
 		courseRoute.POST("/", handlers.PostCourse)
 		courseRoute.GET("/:id", handlers.GetCourseById)
@@ -61,6 +61,7 @@ func CreateRouter(handlers *controller.ControllerManager, mode string) *gin.Engi
 		courseimageRoute.Use(middleware.AuthMiddleware())
 		courseimageRoute.GET("/", handlers.GetListImage)
 		courseimageRoute.POST("/", handlers.CreateCourseimages)
+
 		courseimageRoute.GET("/:id", handlers.FindCourseImageByID)
 		courseimageRoute.PUT("/:id", handlers.UpdateCourseImage)
 		courseimageRoute.DELETE("/:id", handlers.DeleteCourseImage)
@@ -79,7 +80,7 @@ func CreateRouter(handlers *controller.ControllerManager, mode string) *gin.Engi
 		cartRoute.POST("/", handlers.AddToCart)
 		cartRoute.GET("/", handlers.FindAllCart)
 		cartRoute.GET("/:id", handlers.FindCartById)
-		cartRoute.POST("/order", handlers.CreateCart)
+		cartRoute.POST("/order", handlers.CreateOrderCart)
 		cartRoute.GET("/user:id", handlers.FindCartByCartUserID)
 	}
 

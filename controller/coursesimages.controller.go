@@ -25,10 +25,10 @@ func NewCourseimagesController(store services.Store) *CourseimagesController {
 }
 
 type CourseImagePostReq struct {
-	//Filename    *SingleFileUpload
-	Filename    []*multipart.FileHeader `form:"filename" binding:"required"`
-	CoimDefault *string                 `form:"coim_default"`
-	CoimRemeID  *int32                  `form:"coim_reme_id"`
+	Filename *SingleFileUpload
+	//Filename    []*multipart.FileHeader `form:"filename" binding:"required"`
+	CoimDefault *string `form:"coim_default"`
+	CoimRemeID  *int32  `form:"coim_reme_id"`
 }
 
 type CourseImageUpdateReq struct {
@@ -47,7 +47,7 @@ type MultipleFileUpload struct {
 	Filename []*multipart.FileHeader `form:"filename" binding:"required"`
 }
 
-func (ci *CourseimagesController) UploadMultipleProductImage(c *gin.Context) {
+func (ci *CourseimagesController) UploadMultipleImage(c *gin.Context) {
 	form, err := c.MultipartForm()
 	if err != nil {
 		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{
@@ -72,7 +72,7 @@ func (ci *CourseimagesController) UploadMultipleProductImage(c *gin.Context) {
 		}
 	}
 
-	c.JSON(http.StatusCreated, gin.H{"status": "ok", "message": "multiple product has been uploaded."})
+	c.JSON(http.StatusCreated, gin.H{"status": "ok", "message": "multiple image has been uploaded."})
 }
 
 func (ci *CourseimagesController) CreateCourseimages(c *gin.Context) {

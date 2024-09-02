@@ -8,7 +8,6 @@ package db
 import (
 	"context"
 
-	
 )
 
 const createOrderCourse = `-- name: CreateOrderCourse :one

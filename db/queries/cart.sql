@@ -1,6 +1,6 @@
 -- name: CreateCart :one
-INSERT INTO carts (cart_user_id, cart_cours_id, cart_qty, cart_price, cart_modified, cart_status, cart_cart_id)
-VALUES ($1, $2, $3, $4, CURRENT_TIMESTAMP, $5, $6)
+INSERT INTO carts (cart_user_id, cart_cours_id, cart_qty, cart_price, cart_modified, cart_status)
+VALUES ($1, $2, $3, $4, CURRENT_TIMESTAMP, $5)
 RETURNING *;
 
 -- name: GetCartByID :one
