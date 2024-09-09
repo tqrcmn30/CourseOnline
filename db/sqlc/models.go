@@ -45,7 +45,7 @@ type OrderCourse struct {
 	UscoID         int32            `json:"usco_id"`
 	UscoPurchaseNo *string          `json:"usco_purchase_no"`
 	UscoTax        pgtype.Numeric   `json:"usco_tax"`
-	UscoSubtotal   pgtype.Numeric   `json:"usco_subtotal"`
+	UscoSubtotal   *float32   `json:"usco_subtotal"`
 	UscoPatrxNo    *string          `json:"usco_patrx_no"`
 	UscoModified   pgtype.Timestamp `json:"usco_modified"`
 	UscoUserID     *int32           `json:"usco_user_id"`

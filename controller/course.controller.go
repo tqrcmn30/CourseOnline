@@ -21,6 +21,17 @@ func NewCourseController(store services.Store) *CourseController {
 	}
 }
 
+// GetCourseById godoc
+// @Summary 	GetcourseById
+// @Description GetcourseById
+// @Tags 		course
+// @Accept  	json
+// @Produce  	json
+// @Param 		id    path 	int    		false 	"cours id"
+// @Success 	200 	  {object} 	map[string]interface{}
+// @Failure 	500 	  {} 	http.StatusInternalServerError
+// @Failure 	404 	  {} 	http.StatusNotFound
+// @Router /course/{id} [get]
 func (cour *CourseController) GetCourseById(c *gin.Context) {
 	id, _ := strconv.Atoi(c.Param("id"))
 	course, err := models.Nullable(cour.storedb.GetCourseByID(c, int32(id)))
@@ -37,6 +48,18 @@ func (cour *CourseController) GetCourseById(c *gin.Context) {
 	c.JSON(http.StatusOK, course)
 }
 
+// GetListCourse godoc
+// @Summary      List course
+// @Description  get course
+// @Tags         course
+// @Accept       json
+// @Produce      json
+// @Success      200  {object} 	map[string]interface{}
+// @Failure      400  {} http.StatusInternalServerError
+// @Failure      404  {} http.StatusInternalServerError
+// @Failure      500  {} http.StatusInternalServerError
+// @Security Bearer
+// @Router       /course [get]
 func (cour *CourseController) GetListCourse(c *gin.Context) {
 	coursie, err := cour.storedb.GetAllCourses(c)
 	if err != nil {
@@ -46,6 +69,18 @@ func (cour *CourseController) GetListCourse(c *gin.Context) {
 	c.JSON(http.StatusOK, coursie)
 }
 
+// PostCourse godoc
+// @Summary		Create new course
+// @Description	Create new course
+// @Tags		course
+// @Accept		json
+// @Produce		json
+// @Param		course	body		models.CoursePostReq	true	"course"
+// @Success		201  {object} 	map[string]interface{}
+// @Failure		422		{}	http.StatusUnprocessableEntity
+// @Failure		500		{}	http.StatusInternalServerError
+// @Security Bearer
+// @Router	/course  [post]
 func (cour *CourseController) PostCourse(c *gin.Context) {
 	var payload *models.CoursePostReq
 	if err := c.ShouldBindJSON(&payload); err != nil {
@@ -73,6 +108,20 @@ func (cour *CourseController) PostCourse(c *gin.Context) {
 
 }
 
+// UpdateCourse godoc
+// @Summary 	Update course
+// @Description Update course
+// @Tags 		course
+// @Accept 		json
+// @Produce 	json
+// @Param 		id    path 	int    		false 	"cours id"
+// @Param 		course 	body 		models.CourseUpdateReq 	true 	"course"
+// @Success		201  {object} 	map[string]interface{}
+// @Failure		422		{}	http.StatusUnprocessableEntity
+// @Failure		500		{}	http.StatusInternalServerError
+// @Failure 	404 	  {} 	http.StatusNotFound
+// @Security 	Bearer
+// @Router /course/{id} [put]
 func (cour *CourseController) UpdateCourse(c *gin.Context) {
 	var payload *models.CourseUpdateReq
 	courId, _ := strconv.Atoi(c.Param("id"))
@@ -106,6 +155,18 @@ func (cour *CourseController) UpdateCourse(c *gin.Context) {
 
 }
 
+// DeleteCourse godoc
+// @Summary Delete course
+// @Description Delete course by id
+// @Tags course
+// @Accept json
+// @Produce json
+// @Param 		id    path 	int    		false 	"cours id"
+// @Success 204
+// @Failure		500		{}	http.StatusInternalServerError
+// @Failure 	404 	{} 	http.StatusNotFound
+// @Security Bearer
+// @Router /course/{id} [delete]
 func (cour *CourseController) DeleteCourse(c *gin.Context) {
 	courId, _ := strconv.Atoi(c.Param("id"))
 

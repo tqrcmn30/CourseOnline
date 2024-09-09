@@ -38,17 +38,18 @@ func CreateRouter(handlers *controller.ControllerManager, mode string) *gin.Engi
 
 	categoryRoute := api.Group("/category")
 	{
-		categoryRoute.Use(middleware.AuthMiddleware())
+		//categoryRoute.Use(middleware.AuthMiddleware())
 		categoryRoute.GET("/", handlers.GetListCategory)
 		categoryRoute.POST("/", handlers.PostCategory)
 		categoryRoute.PUT("/:id", handlers.UpdateCategory)
 		categoryRoute.GET("/:id", handlers.GetCategoryById)
+		categoryRoute.DELETE("/:id", handlers.DeleteCategory)
 
 	}
 
 	courseRoute := api.Group("/course")
 	{
-		courseRoute.Use(middleware.AuthMiddleware())
+		//courseRoute.Use(middleware.AuthMiddleware())
 		courseRoute.GET("/", handlers.GetListCourse)
 		courseRoute.POST("/", handlers.PostCourse)
 		courseRoute.GET("/:id", handlers.GetCourseById)
@@ -61,7 +62,7 @@ func CreateRouter(handlers *controller.ControllerManager, mode string) *gin.Engi
 		courseimageRoute.Use(middleware.AuthMiddleware())
 		courseimageRoute.GET("/", handlers.GetListImage)
 		courseimageRoute.POST("/", handlers.CreateCourseimages)
-
+		courseimageRoute.POST("/multi", handlers.UploadMultipleImage)
 		courseimageRoute.GET("/:id", handlers.FindCourseImageByID)
 		courseimageRoute.PUT("/:id", handlers.UpdateCourseImage)
 		courseimageRoute.DELETE("/:id", handlers.DeleteCourseImage)

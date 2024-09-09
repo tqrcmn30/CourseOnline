@@ -51,7 +51,6 @@ func (uc *UsersController) Sigin(c *gin.Context) {
 	args := &models.CreateUserReq{
 		UserName:     payload.UserName,
 		UserPassword: payload.UserPassword,
-		UserPhone:    payload.UserPhone,
 	}
 	user, err := uc.storedb.Signin(c, *args)
 

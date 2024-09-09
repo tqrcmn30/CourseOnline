@@ -93,7 +93,6 @@ type CartPostReq struct {
 	CartQty     *int32   `json:"cart_qty"`
 	CartPrice   *float32 `json:"cart_price"`
 	CartStatus  *string  `json:"cart_status"`
-	CartCartID  *int32   `json:"cart_cart_id"`
 }
 
 type CartResponse struct {
@@ -109,6 +108,7 @@ type CartCourseResponse struct {
 	CoursAuthor *string  `json:"cours_author"`
 	CoursPrice  *float32 `json:"cours_price"`
 	Qty         *int32   `json:"qty"`
+	CartStatus  *string  `json:"cart_status"`
 }
 
 type CartUpdateReq struct {

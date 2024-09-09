@@ -6,13 +6,13 @@ RETURNING *;
 -- name: GetCartByID :one
 SELECT * FROM carts cr 
 JOIN user on cr.cart_user_id=cu.cart_user_id
-JOIN courses on cr.cart_course_id=cu.cart_cours_id
+JOIN courses on cr.cart_cours_id=cu.cart_cours_id
 WHERE cart_id = $1;
 
 -- name: GetCartByUserID :many
 SELECT * FROM carts cr 
-JOIN user on cr.cart_user_id=cu.cart_user_id
-JOIN courses on cr.cart_course_id=cu.cart_cours_id
+JOIN users on user_id=cr.cart_user_id
+JOIN courses on cours_id=cr.cart_cours_id
 WHERE cart_user_id = $1;
 
 -- name: GetCartByUserandCourse :one
@@ -24,8 +24,8 @@ SELECT * FROM carts;
 
 -- name: UpdateCart :one
 UPDATE carts
-SET cart_qty = $1
-WHERE cart_id = $2
+SET cart_qty = $1, cart_price = $2
+WHERE cart_id = $3
 RETURNING *;
 
 -- name: DeleteCart :exec

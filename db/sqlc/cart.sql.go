@@ -91,8 +91,8 @@ func (q *Queries) GetAllCarts(ctx context.Context) ([]*Cart, error) {
 
 const getCartByID = `-- name: GetCartByID :one
 SELECT cart_id, cart_user_id, cart_cours_id, cart_qty, cart_price, cart_modified, cart_status, cart_cart_id, cours_id, cours_name, cours_desc, cours_author, cours_price, cours_modified, cours_cate_id FROM carts cr 
-JOIN user on cr.cart_user_id=cu.cart_user_id
-JOIN courses on cr.cart_course_id=cu.cart_cours_id
+JOIN users on user_id=cr.cart_user_id
+JOIN courses on cours_id=cr.cart_cours_id
 WHERE cart_id = $1
 `
 
@@ -139,8 +139,8 @@ func (q *Queries) GetCartByID(ctx context.Context, cartID int32) (*GetCartByIDRo
 
 const getCartByUserID = `-- name: GetCartByUserID :many
 SELECT cart_id, cart_user_id, cart_cours_id, cart_qty, cart_price, cart_modified, cart_status, cart_cart_id, cours_id, cours_name, cours_desc, cours_author, cours_price, cours_modified, cours_cate_id FROM carts cr 
-JOIN user on cr.cart_user_id=cu.cart_user_id
-JOIN courses on cr.cart_course_id=cu.cart_cours_id
+JOIN users on user_id=cr.cart_user_id
+JOIN courses on cours_id=cr.cart_cours_id
 WHERE cart_user_id = $1
 `
 

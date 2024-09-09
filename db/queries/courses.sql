@@ -6,8 +6,10 @@ RETURNING *;
 -- name: GetCourseByID :one
 SELECT * FROM courses WHERE cours_id = $1;
 
+
 -- name: GetAllCourses :many
-SELECT * FROM courses;
+SELECT * FROM courses
+JOIN course_images on cours_id = coim_id;
 
 -- name: GetAllCoursesPaging :many
 SELECT cours_name, cours_desc, cours_author, cours_price, cours_modified, cours_cate_id

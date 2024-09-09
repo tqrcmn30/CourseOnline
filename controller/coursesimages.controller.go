@@ -31,6 +31,13 @@ type CourseImagePostReq struct {
 	CoimRemeID  *int32  `form:"coim_reme_id"`
 }
 
+type CourseMultiImagePostReq struct {
+	//Filename    *SingleFileUpload
+	Filename    []*multipart.FileHeader `form:"filename" binding:"required"`
+	CoimDefault *string                 `form:"coim_default"`
+	CoimRemeID  *int32                  `form:"coim_reme_id"`
+}
+
 type CourseImageUpdateReq struct {
 	CoimID       int32   `form:"coim_id"`
 	CoimFilename *string `form:"coim_filename"`
@@ -48,6 +55,12 @@ type MultipleFileUpload struct {
 }
 
 func (ci *CourseimagesController) UploadMultipleImage(c *gin.Context) {
+	var payload *CourseMultiImagePostReq
+
+	if err := c.ShouldBind(&payload); err != nil {
+		c.JSON(http.StatusUnprocessableEntity, models.NewValidationError(err))
+		return
+	}
 	form, err := c.MultipartForm()
 	if err != nil {
 		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{
@@ -68,6 +81,18 @@ func (ci *CourseimagesController) UploadMultipleImage(c *gin.Context) {
 			c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{
 				"message": "Unable to save the file",
 			})
+			return
+		}
+
+		args := &db.CreateCourseImageParams{
+			CoimFilename: &newFileName,
+			CoimDefault:  payload.CoimDefault,
+			CoimRemeID:   payload.CoimRemeID,
+		}
+
+		_, err := ci.storedb.CreateCourseImage(c, *args)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, models.NewError(err))
 			return
 		}
 	}

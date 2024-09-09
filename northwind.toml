@@ -15,7 +15,7 @@ driver_name = "postgres"
 # HTTP server configuration
 
 [http]
-
+host = "localhost"
 server_address = ":8888"
 ###############################################################################
 # jwt server configuration

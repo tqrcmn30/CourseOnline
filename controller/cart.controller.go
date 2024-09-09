@@ -44,6 +44,7 @@ func (ct *CartController) AddToCart(c *gin.Context) {
 			CartCoursID: payload.CartCoursID,
 			CartPrice:   payload.CartPrice,
 			CartQty:     payload.CartQty,
+			CartStatus:  payload.CartStatus,
 		}
 		// create new cart & return
 		cart, err = ct.storedb.CreateCart(c, *argsAddCart)
@@ -80,10 +81,12 @@ func (ct *CartController) AddToCart(c *gin.Context) {
 	//fill carts data to dto response
 	for _, v := range carts {
 		product := &models.CartCourseResponse{
-			CoursID:    &v.CoursID,
-			CoursName:  v.CoursName,
-			CoursPrice: v.CoursPrice,
-			Qty:        v.CartQty,
+			CoursID:     &v.CoursID,
+			CoursName:   v.CoursName,
+			CoursAuthor: v.CoursAuthor,
+			CoursPrice:  v.CoursPrice,
+			Qty:         v.CartQty,
+			CartStatus:  v.CartStatus,
 		}
 		response.Course = append(response.Course, product)
 	}
@@ -96,8 +99,8 @@ func (ct *CartController) DeleteCart(c *gin.Context) error {
 
 func (ct *CartController) FindCartByCartUserID(c *gin.Context) {
 	id, _ := strconv.Atoi(c.Param("id"))
-	Userid := int32(id)
-	carts, err := ct.storedb.GetCartByUserID(c, &Userid)
+	userId := int32(id)
+	carts, err := ct.storedb.GetCartByUserID(c, &userId)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, models.NewError(err))
 		return
@@ -110,18 +113,16 @@ func (ct *CartController) FindCartByCartUserID(c *gin.Context) {
 	//fill carts data to dto response
 	for _, v := range carts {
 		product := &models.CartCourseResponse{
-			CoursID:    &v.CoursID,
-			CoursName:  v.CoursName,
-			CoursPrice: v.CoursPrice,
-			Qty:        v.CartQty,
+			CoursID:     &v.CoursID,
+			CoursName:   v.CoursName,
+			CoursAuthor: v.CoursAuthor,
+			CoursPrice:  v.CoursPrice,
+			Qty:         v.CartQty,
+			CartStatus:  v.CartStatus,
 		}
 		response.Course = append(response.Course, product)
 	}
 	c.JSON(http.StatusOK, response)
-}
-
-func (ct *CartController) FindCartByCustomerPaging(c *gin.Context) {
-	panic("not implemented") // TODO: Implement
 }
 
 func (ct *CartController) UpdateCartQty(c *gin.Context) {

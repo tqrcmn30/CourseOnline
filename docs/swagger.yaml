@@ -1,0 +1,383 @@
+basePath: /api/
+definitions:
+  models.CategoryPostReq:
+    properties:
+      cate_name:
+        type: string
+    required:
+    - cate_name
+    type: object
+  models.CategoryUpdateReq:
+    properties:
+      cate_id:
+        type: integer
+      cate_name:
+        type: string
+    type: object
+  models.CoursePostReq:
+    properties:
+      cours_author:
+        type: string
+      cours_cate_id:
+        type: integer
+      cours_desc:
+        type: string
+      cours_name:
+        type: string
+      cours_price:
+        type: number
+    required:
+    - cours_name
+    type: object
+  models.CourseUpdateReq:
+    properties:
+      cours_author:
+        type: string
+      cours_cate_id:
+        type: integer
+      cours_desc:
+        type: string
+      cours_id:
+        type: integer
+      cours_name:
+        type: string
+      cours_price:
+        type: number
+    type: object
+externalDocs:
+  description: OpenAPI
+  url: https://swagger.io/resources/open-api/
+host: localhost:8888
+info:
+  contact:
+    email: support@swagger.io
+    name: tqrcmn30@gmail.com
+    url: http://www.swagger.io/support
+  description: This is a sample server celler server.
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfService: http://swagger.io/terms/
+  title: CourseOnline
+  version: "1.0"
+paths:
+  /category:
+    get:
+      consumes:
+      - application/json
+      description: get category
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            type: ""
+        "404":
+          description: Not Found
+          schema:
+            type: ""
+        "500":
+          description: Internal Server Error
+          schema:
+            type: ""
+      security:
+      - Bearer: []
+      summary: List category
+      tags:
+      - category
+    post:
+      consumes:
+      - application/json
+      description: Create new category
+      parameters:
+      - description: category
+        in: body
+        name: category
+        required: true
+        schema:
+          $ref: '#/definitions/models.CategoryPostReq'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            additionalProperties: true
+            type: object
+        "422":
+          description: Unprocessable Entity
+          schema:
+            type: ""
+        "500":
+          description: Internal Server Error
+          schema:
+            type: ""
+      security:
+      - Bearer: []
+      summary: Create new category
+      tags:
+      - category
+  /category/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete category by id
+      parameters:
+      - description: cate id
+        in: path
+        name: id
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+        "404":
+          description: Not Found
+          schema:
+            type: ""
+        "500":
+          description: Internal Server Error
+          schema:
+            type: ""
+      security:
+      - Bearer: []
+      summary: Delete category
+      tags:
+      - category
+    get:
+      consumes:
+      - application/json
+      description: GetCategoryById
+      parameters:
+      - description: category id
+        in: path
+        name: id
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            type: ""
+        "500":
+          description: Internal Server Error
+          schema:
+            type: ""
+      summary: GetCategoryById
+      tags:
+      - category
+    put:
+      consumes:
+      - application/json
+      description: Update category
+      parameters:
+      - description: cate id
+        in: path
+        name: id
+        type: integer
+      - description: category
+        in: body
+        name: category
+        required: true
+        schema:
+          $ref: '#/definitions/models.CategoryUpdateReq'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            additionalProperties: true
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            type: ""
+        "422":
+          description: Unprocessable Entity
+          schema:
+            type: ""
+        "500":
+          description: Internal Server Error
+          schema:
+            type: ""
+      security:
+      - Bearer: []
+      summary: Update category
+      tags:
+      - category
+  /course:
+    get:
+      consumes:
+      - application/json
+      description: get course
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            type: ""
+        "404":
+          description: Not Found
+          schema:
+            type: ""
+        "500":
+          description: Internal Server Error
+          schema:
+            type: ""
+      security:
+      - Bearer: []
+      summary: List course
+      tags:
+      - course
+    post:
+      consumes:
+      - application/json
+      description: Create new course
+      parameters:
+      - description: course
+        in: body
+        name: course
+        required: true
+        schema:
+          $ref: '#/definitions/models.CoursePostReq'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            additionalProperties: true
+            type: object
+        "422":
+          description: Unprocessable Entity
+          schema:
+            type: ""
+        "500":
+          description: Internal Server Error
+          schema:
+            type: ""
+      security:
+      - Bearer: []
+      summary: Create new course
+      tags:
+      - course
+  /course/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete course by id
+      parameters:
+      - description: cours id
+        in: path
+        name: id
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+        "404":
+          description: Not Found
+          schema:
+            type: ""
+        "500":
+          description: Internal Server Error
+          schema:
+            type: ""
+      security:
+      - Bearer: []
+      summary: Delete course
+      tags:
+      - course
+    get:
+      consumes:
+      - application/json
+      description: GetcourseById
+      parameters:
+      - description: cours id
+        in: path
+        name: id
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            type: ""
+        "500":
+          description: Internal Server Error
+          schema:
+            type: ""
+      summary: GetcourseById
+      tags:
+      - course
+    put:
+      consumes:
+      - application/json
+      description: Update course
+      parameters:
+      - description: cours id
+        in: path
+        name: id
+        type: integer
+      - description: course
+        in: body
+        name: course
+        required: true
+        schema:
+          $ref: '#/definitions/models.CourseUpdateReq'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            additionalProperties: true
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            type: ""
+        "422":
+          description: Unprocessable Entity
+          schema:
+            type: ""
+        "500":
+          description: Internal Server Error
+          schema:
+            type: ""
+      security:
+      - Bearer: []
+      summary: Update course
+      tags:
+      - course
+securityDefinitions:
+  BasicAuth:
+    type: basic
+swagger: "2.0"
